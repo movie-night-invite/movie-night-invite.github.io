@@ -1,0 +1,717 @@
+<title>Movie Night</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Libre+Franklin:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  /* ── Navy, white and gold: a formal evening invitation. One committed visual world. ── */
+  :root{
+    --ground:#0B1A33;
+    --panel:#12294C;
+    --ink:#FCFBF8;
+    --ink-soft:#AFC0D8;
+    --gold:#D9B26A;
+    --gold-deep:#A87F35;
+    --hair:rgba(217,178,106,.30);
+    --hair-faint:rgba(217,178,106,.15);
+
+    --display:"Marcellus","Optima","Palatino Linotype",Georgia,serif;
+    --body:"Libre Franklin","Helvetica Neue",Arial,sans-serif;
+    --util:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  }
+
+  *{box-sizing:border-box}
+
+  body{
+    margin:0;
+    background-color:var(--ground);
+    background-image:
+      radial-gradient(58rem 34rem at 50% -7rem, rgba(217,178,106,.17), transparent 68%),
+      radial-gradient(44rem 32rem at 86% 26rem, rgba(37,74,138,.34), transparent 72%);
+    background-repeat:no-repeat;
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:clamp(1rem,.97rem + .18vw,1.075rem);
+    line-height:1.68;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .card{
+    max-width:46rem;
+    margin-inline:auto;
+    padding:clamp(2.25rem,6vw,4.5rem) clamp(1.15rem,5vw,2.5rem) clamp(3rem,7vw,5rem);
+    display:flex;
+    flex-direction:column;
+    gap:clamp(2.75rem,6vw,4rem);
+  }
+
+  /* ── type roles ── */
+  .eyebrow{
+    font-family:var(--util);
+    font-size:.7rem;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin:0;
+  }
+  h1{
+    font-family:var(--display);
+    font-weight:400;
+    font-size:clamp(2.6rem,10vw,4.5rem);
+    line-height:1.02;
+    letter-spacing:.012em;
+    text-wrap:balance;
+    margin:.75rem 0 0;
+  }
+  h2{
+    font-family:var(--display);
+    font-weight:400;
+    font-size:clamp(1.6rem,4.3vw,2.2rem);
+    line-height:1.18;
+    letter-spacing:.015em;
+    text-wrap:balance;
+    margin:0;
+  }
+  h3{
+    font-family:var(--display);
+    font-weight:400;
+    font-size:1.24rem;
+    letter-spacing:.015em;
+    margin:0;
+  }
+  p{margin:0;max-width:62ch}
+  .lede{
+    font-family:var(--display);
+    font-size:clamp(1.12rem,2.6vw,1.4rem);
+    line-height:1.45;
+    letter-spacing:.01em;
+    color:var(--ink);
+    margin-top:1.4rem;
+    max-width:34ch;
+  }
+  .sub{color:var(--ink-soft);margin-top:1.1rem}
+  .sub b{color:var(--ink);font-weight:700}
+
+  section{display:flex;flex-direction:column;gap:1.25rem}
+  .kicker{
+    font-family:var(--util);
+    font-size:.68rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin:0;
+  }
+  .head{display:flex;flex-direction:column;gap:.55rem;padding-top:1.6rem;border-top:1px solid var(--hair)}
+  .head::before{
+    content:"";
+    display:block;
+    height:1px;
+    background:var(--hair-faint);
+    margin-top:-1.2rem;
+    margin-bottom:1.1rem;
+  }
+
+  /* ── hero ── */
+  .hero{gap:0;text-align:left}
+  .film{
+    font-family:var(--display);
+    font-size:clamp(1.3rem,4.4vw,1.95rem);
+    line-height:1.2;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-top:1.15rem;
+  }
+  .film span{
+    display:block;
+    font-family:var(--util);
+    font-size:.66rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-top:.6rem;
+  }
+  .diamond{
+    font-size:.85rem;
+    color:var(--gold);
+    letter-spacing:1.1em;
+    margin:2.4rem 0 0;
+    opacity:.8;
+  }
+
+  /* ── the facts strip ── */
+  .facts{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));
+    gap:1.35rem 2rem;
+    margin:0;
+  }
+  .fact{display:flex;flex-direction:column;gap:.2rem;border-top:1px solid var(--hair-faint);padding-top:.7rem}
+  .fact dt{
+    font-family:var(--util);
+    font-size:.65rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .fact dd{
+    margin:0;
+    font-family:var(--display);
+    font-size:1.3rem;
+    line-height:1.25;
+    letter-spacing:.01em;
+    font-variant-numeric:tabular-nums;
+  }
+  .fact dd small{display:block;font-family:var(--body);font-size:.8rem;color:var(--ink-soft);margin-top:.2rem}
+  .fact-accent dd{color:var(--gold)}
+
+  /* ── run of show: the markers are real clock times, not decoration ── */
+  .run{list-style:none;margin:0;padding:0}
+  .run li{
+    display:grid;
+    grid-template-columns:5.25rem 1fr;
+    gap:.35rem 1.25rem;
+    padding:.8rem 0;
+    border-top:1px solid var(--hair-faint);
+  }
+  .run li:first-child{border-top:none;padding-top:0}
+  .run time{
+    font-family:var(--util);
+    font-size:.85rem;
+    color:var(--gold);
+    font-variant-numeric:tabular-nums;
+    padding-top:.18rem;
+  }
+  .run b{font-weight:700}
+  .run span{color:var(--ink-soft);font-size:.94rem;display:block}
+
+  /* ── plain prose blocks ── */
+  .prose{display:flex;flex-direction:column;gap:1rem}
+  .credit{
+    font-size:.9rem;
+    color:var(--ink-soft);
+    border-left:2px solid var(--gold-deep);
+    padding-left:1rem;
+    max-width:56ch;
+  }
+  .credit b{color:var(--ink);font-weight:500}
+
+  /* ── bulleted reason / watch-for lists ── */
+  .marks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.95rem}
+  .marks li{position:relative;padding-left:1.7rem;max-width:62ch}
+  .marks li::before{
+    content:"◆";
+    position:absolute;
+    left:0;
+    top:.06em;
+    font-size:.6rem;
+    color:var(--gold);
+  }
+  .marks b{font-weight:700;color:var(--ink)}
+  .marks li{color:var(--ink-soft)}
+  .marks li b{color:var(--ink)}
+
+  /* ── discussion, plated as courses ── */
+  .course{display:flex;flex-direction:column;gap:.85rem}
+  .course-label{
+    font-family:var(--util);
+    font-size:.65rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--gold);
+    display:block;
+    margin-bottom:.3rem;
+  }
+  .q{margin:0;padding-left:2.1rem;display:flex;flex-direction:column;gap:.7rem}
+  .q li{max-width:58ch;padding-left:.15rem}
+  .q li::marker{font-family:var(--util);font-size:.82em;color:var(--gold)}
+
+  /* ── house notes ── */
+  .notes{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));
+    gap:1.25rem 2rem;
+    margin:0;
+  }
+  .notes div{display:flex;flex-direction:column;gap:.25rem}
+  .notes dt{
+    font-family:var(--util);
+    font-size:.65rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
+  .notes dd{margin:0;color:var(--ink-soft);font-size:.95rem}
+
+  .closing{
+    text-align:center;
+    border-top:1px solid var(--hair);
+    padding-top:2.25rem;
+    display:flex;
+    flex-direction:column;
+    gap:.6rem;
+  }
+  .closing q{
+    font-family:var(--display);
+    font-size:clamp(1.5rem,5vw,2rem);
+    letter-spacing:.02em;
+    color:var(--gold);
+    quotes:"“" "”";
+  }
+  .closing p{margin-inline:auto;font-family:var(--util);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+  .closing .wink{font-family:var(--body);font-size:.85rem;letter-spacing:normal;text-transform:none;color:var(--ink-soft);opacity:.75;max-width:34ch}
+
+  a{color:var(--gold);text-underline-offset:.2em}
+  a:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}
+
+
+  /* ── RSVP: fills in a mail to the host ── */
+  .jump{white-space:nowrap;text-decoration-thickness:1px}
+  .rsvp-form{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(11.5rem,1fr));
+    gap:1.1rem 1.35rem;
+    margin:0;
+  }
+  .rsvp-form label{
+    display:flex;
+    flex-direction:column;
+    gap:.45rem;
+    font-family:var(--util);
+    font-size:.65rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
+  .rsvp-form .wide{grid-column:1/-1}
+  .rsvp-form input{
+    background:rgba(255,255,255,.05);
+    border:1px solid var(--hair);
+    border-radius:2px;
+    padding:.72rem .85rem;
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:1rem;
+    letter-spacing:normal;
+    text-transform:none;
+  }
+  .rsvp-form input::placeholder{color:rgba(175,192,216,.5)}
+  .rsvp-form input:focus-visible{outline:2px solid var(--gold);outline-offset:1px;border-color:transparent}
+  #r-count{max-width:8rem;font-variant-numeric:tabular-nums}
+  .btn{
+    align-self:flex-start;
+    display:inline-flex;
+    align-items:center;
+    gap:.55rem;
+    background:var(--gold);
+    color:#0B1A33;
+    font-weight:700;
+    font-size:.95rem;
+    padding:.85rem 1.7rem;
+    border-radius:2px;
+    text-decoration:none;
+    transition:background .2s ease,transform .2s ease;
+  }
+  .btn:hover{background:#EDC98A;transform:translateY(-1px)}
+  .btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+  .fine{font-size:.87rem;color:var(--ink-soft);max-width:52ch}
+  @media (prefers-reduced-motion:reduce){.btn{transition:none}.btn:hover{transform:none}}
+
+
+  .poster{
+    width:100%;
+    max-width:34rem;
+    margin:3rem auto 0;
+    display:flex;
+    flex-direction:column;
+    gap:1.1rem;
+    align-items:center;
+  }
+  .stage{
+    display:block;
+    width:100%;
+    height:auto;
+    background:linear-gradient(180deg,#0E2242 0%,#0A1730 70%,#081327 100%);
+    border:1px solid rgba(217,178,106,.4);
+    box-shadow:0 18px 40px rgba(3,8,18,.55);
+  }
+  .stage .ln{fill:none;stroke:var(--gold);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .stage .thin{stroke-width:1.5;opacity:.75}
+  .stage .edge{fill:none;stroke:var(--gold);stroke-width:1.2;opacity:.28}
+  .stage .wine{fill:var(--gold-deep);opacity:.65;stroke:none}
+  .stage .flame{fill:var(--gold);stroke:none}
+  .stage .cone{fill:url(#lampcone);stroke:none}
+  .stage .doorlight{fill:url(#doorlight);stroke:none}
+  .stage .candleglow{fill:url(#candlelight);stroke:none}
+
+  /* the light comes up and goes down */
+  @keyframes lamplight{0%,100%{opacity:.6}45%{opacity:1}}
+  @keyframes doorlight{0%,100%{opacity:.75}60%{opacity:1}}
+  @keyframes flicker{0%,100%{opacity:1}38%{opacity:.62}64%{opacity:.9}}
+  .stage .cone{animation:lamplight 7s ease-in-out infinite}
+  .stage .doorlight{animation:doorlight 9s ease-in-out infinite}
+  .stage .flame,.stage .candleglow{animation:flicker 3.4s ease-in-out infinite}
+
+  /* they arrive, they stay a while, they leave */
+  @keyframes arrive{
+    0%{transform:translateX(215px);opacity:0}
+    6%{opacity:1}
+    16%,74%{transform:translateX(0);opacity:1}
+    88%{transform:translateX(215px);opacity:1}
+    93%,100%{transform:translateX(215px);opacity:0}
+  }
+  @keyframes sway{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+  @keyframes toast{
+    0%,26%{transform:rotate(0deg)}
+    34%,52%{transform:rotate(-30deg)}
+    62%,100%{transform:rotate(0deg)}
+  }
+  @keyframes toast-seat{
+    0%,28%{transform:rotate(0deg)}
+    36%,50%{transform:rotate(-16deg)}
+    60%,100%{transform:rotate(0deg)}
+  }
+  .stage .walker{animation:arrive 17s cubic-bezier(.4,0,.2,1) infinite}
+  .stage .sway{animation:sway 2.4s ease-in-out infinite}
+  .stage .arm-toast{transform-origin:9px -136px;animation:toast 17s ease-in-out infinite}
+  .stage .arm-seat{transform-origin:2px -68px;animation:toast-seat 17s ease-in-out infinite}
+
+  @media (prefers-reduced-motion:reduce){
+    .stage *{animation:none !important}
+  }
+
+  .poster figcaption{display:flex;flex-direction:column;gap:.5rem;align-items:center;text-align:center}
+  .poster-title{
+    font-family:var(--display);
+    font-size:clamp(1.9rem,6vw,2.6rem);
+    line-height:1;
+    letter-spacing:.02em;
+    color:var(--gold);
+    margin:0;
+  }
+  .poster-credit{
+    font-family:var(--util);
+    font-size:.6rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin:0;
+  }
+
+  /* ── one orchestrated entrance, nothing more ── */
+  @keyframes rise{from{opacity:0;transform:translateY(.6rem)}to{opacity:1;transform:none}}
+  .hero > *{animation:rise .8s cubic-bezier(.2,.7,.3,1) backwards}
+  .hero > *:nth-child(1){animation-delay:.05s}
+  .hero > *:nth-child(2){animation-delay:.18s}
+  .hero > *:nth-child(3){animation-delay:.34s}
+  .hero > *:nth-child(4){animation-delay:.46s}
+  .hero > *:nth-child(5){animation-delay:.58s}
+  @media (prefers-reduced-motion:reduce){
+    .hero > *{animation:none}
+  }
+</style>
+
+<main class="card">
+
+  <header class="hero">
+    <p class="eyebrow">Friday · 21 August 2026 · Attendance strongly encouraged</p>
+    <h1>Movie Night</h1>
+    <p class="lede">Two couples, one apartment, and one dinner party that goes somewhere nobody printed on the invitation.</p>
+    <p class="sub">Seth Rogen, Penélope Cruz and Edward Norton spend 107 minutes proving that honesty is a catastrophic thing to serve at dinner. <b>$7 gets you in and keeps the snack bowls full.</b> Doors at 7:15, film at 7:30, strong opinions from 9:30. <a class="jump" href="#rsvp">RSVP below ↓</a></p>
+    <figure class="poster">
+      <svg class="stage" viewBox="0 0 600 400" role="img" aria-label="An animated scene: a lit dinner table with two people seated, two more walking in from the right and raising a glass, and a lamp overhead that brightens and dims.">
+        <defs>
+          <linearGradient id="lampcone" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#D9B26A" stop-opacity=".26"/>
+            <stop offset="100%" stop-color="#D9B26A" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="doorlight" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#D9B26A" stop-opacity=".26"/>
+            <stop offset="100%" stop-color="#D9B26A" stop-opacity=".07"/>
+          </linearGradient>
+          <radialGradient id="candlelight">
+            <stop offset="0%" stop-color="#D9B26A" stop-opacity=".5"/>
+            <stop offset="100%" stop-color="#D9B26A" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <path class="doorlight" d="M470 108H580V330H470Z"/>
+        <path class="ln thin" d="M468 330V106H582V330"/>
+        <path class="ln thin" d="M0 330H600M0 340H600"/>
+
+        <g class="lamp">
+          <path class="ln thin" d="M250 8V92"/>
+          <path class="ln" d="M222 116 250 92 278 116Z"/>
+          <path class="cone" d="M222 116 168 330H332L278 116Z"/>
+        </g>
+
+      <g class="seat-group" transform="translate(150,286)">
+        <path class="ln thin" d="M-26 -4V-84M-26 -4H14M-24 -4V44M12 -4V26"/>
+        <path class="ln" d="M-14 -8 22 -6M22 -6 26 44M26 44H40"/>
+        <path class="ln" d="M-12 -8C-17 -34-15 -62-6 -74"/>
+        <path class="ln" d="M7 -12C11 -38 9 -60 3 -72"/>
+        <path class="ln" d="M-6 -74C-2 -78 2 -78 4 -74"/>
+        <circle class="ln" cx="-1" cy="-90" r="14"/>
+        <path class="ln" d="M-15 -90C-15 -103-9 -109-1 -109 7 -109 13 -103 13 -89"/>
+        <g class="arm-seat">
+          <path class="ln" d="M2 -68C15 -63 26 -56 33 -50"/>
+        </g>
+      </g>
+      <g class="seat-group" transform="translate(350,286) scale(-1,1)">
+        <path class="ln thin" d="M-26 -4V-84M-26 -4H14M-24 -4V44M12 -4V26"/>
+        <path class="ln" d="M-14 -8 22 -6M22 -6 26 44M26 44H40"/>
+        <path class="ln" d="M-12 -8C-17 -34-15 -62-6 -74"/>
+        <path class="ln" d="M7 -12C11 -38 9 -60 3 -72"/>
+        <path class="ln" d="M-6 -74C-2 -78 2 -78 4 -74"/>
+        <circle class="ln" cx="-1" cy="-90" r="14"/>
+        <path class="ln" d="M-15 -90C-15 -103-9 -109-1 -109 7 -109 13 -103 13 -89"/>
+        <g class="arm-seat">
+          <path class="ln" d="M2 -68C15 -63 26 -56 33 -50"/>
+        </g>
+      </g>
+
+        <path class="ln" d="M166 250H334M178 256V330M322 256V330"/>
+        <circle class="candleglow" cx="250" cy="232" r="70"/>
+        <path class="ln thin" d="M243 250V232C246 230 254 230 257 232V250"/>
+        <path class="flame" d="M250 227c-5-5-2-11 0-14 2 3 6 9 0 14Z"/>
+        <path class="ln thin" d="M196 250V240M190 240C192 236 200 236 202 240M191 228C195 231 201 231 205 228 205 235 201 240 198 240 195 240 191 235 191 228Z"/>
+        <path class="ln thin" d="M304 250V240M298 240C300 236 308 236 310 240M299 228C303 231 309 231 313 228 313 235 309 240 306 240 303 240 299 235 299 228Z"/>
+
+      <g transform="translate(398,330)">
+        <g class="walker" style="animation-delay:0s">
+          <g class="sway">
+            <path class="ln" d="M-9 0-7 -72M11 0 9 -72M-17 0H-4M3 0H16"/>
+            <path class="ln" d="M-9 -72H11"/>
+            <path class="ln" d="M-9 -72C-14 -101-14 -127-6 -139"/>
+            <path class="ln" d="M11 -72C16 -101 14 -127 8 -139"/>
+            <path class="ln" d="M-6 -139C0 -145 6 -145 8 -139"/>
+            <path class="ln" d="M-7 -136C-17 -123-20 -104-18 -90"/>
+            <circle class="ln" cx="1" cy="-158" r="15"/>
+            <path class="ln" d="M-14 -158C-14 -173-8 -180 1 -180 10 -180 16 -173 16 -156"/>
+            <g class="arm-toast">
+              <path class="ln" d="M9 -136C19 -126 22 -112 20 -100"/>
+              <path class="ln thin" d="M11 -112C17 -115 27 -115 33 -112M12 -112C13 -104 16 -100 22 -100 28 -100 31 -104 32 -112M22 -100 22 -92M17 -90C19 -88 25 -88 27 -90"/>
+              <path class="wine" d="M13 -109C18 -106 26 -106 31 -109 30 -104 27 -102 22 -102 17 -102 14 -104 13 -109Z"/>
+            </g>
+          </g>
+        </g>
+      </g>
+      <g transform="translate(452,330)">
+        <g class="walker" style="animation-delay:0.5s">
+          <g class="sway">
+            <path class="ln" d="M-9 0-7 -72M11 0 9 -72M-17 0H-4M3 0H16"/>
+            <path class="ln" d="M-9 -72H11"/>
+            <path class="ln" d="M-9 -72C-14 -101-14 -127-6 -139"/>
+            <path class="ln" d="M11 -72C16 -101 14 -127 8 -139"/>
+            <path class="ln" d="M-6 -139C0 -145 6 -145 8 -139"/>
+            <path class="ln" d="M-7 -136C-17 -123-20 -104-18 -90"/>
+            <circle class="ln" cx="1" cy="-158" r="15"/>
+            <path class="ln" d="M-14 -158C-14 -173-8 -180 1 -180 10 -180 16 -173 16 -156"/>
+            <g class="arm-toast">
+              <path class="ln" d="M9 -136C19 -126 22 -112 20 -100"/>
+              <path class="ln thin" d="M11 -112C17 -115 27 -115 33 -112M12 -112C13 -104 16 -100 22 -100 28 -100 31 -104 32 -112M22 -100 22 -92M17 -90C19 -88 25 -88 27 -90"/>
+              <path class="wine" d="M13 -109C18 -106 26 -106 31 -109 30 -104 27 -102 22 -102 17 -102 14 -104 13 -109Z"/>
+            </g>
+          </g>
+        </g>
+      </g>
+
+        <rect class="edge" x="8" y="8" width="584" height="384"/>
+      </svg>
+      <figcaption>
+        <p class="poster-title">The Invite.</p>
+        <p class="poster-credit">Olivia Wilde · 2026 · 107 minutes · A24</p>
+      </figcaption>
+    </figure>
+  </header>
+
+  <section>
+    <div class="head">
+      <p class="kicker">The particulars</p>
+      <h2>Everything you need to show up</h2>
+    </div>
+    <dl class="facts">
+      <div class="fact"><dt>Date</dt><dd>Fri, Aug 21<small>It's a Friday. No excuses.</small></dd></div>
+      <div class="fact"><dt>Doors</dt><dd>7:15 PM<small>Snacks already deployed</small></dd></div>
+      <div class="fact"><dt>Film starts</dt><dd>7:30 PM<small>Sharp. Latecomers get no recap.</small></dd></div>
+      <div class="fact fact-accent"><dt>Admission</dt><dd>$7<small>Snacks included, obviously</small></dd></div>
+      <div class="fact"><dt>Runtime</dt><dd>1h 47m<small>Shorter than the argument after</small></dd></div>
+      <div class="fact"><dt>Bring</dt><dd>Opinions<small>Strong ones. Wrong ones welcome.</small></dd></div>
+    </dl>
+  </section>
+
+  <section>
+    <div class="head">
+      <p class="kicker">Run of show</p>
+      <h2>How the night goes</h2>
+    </div>
+    <ol class="run">
+      <li><time datetime="19:15">7:15</time><div><b>Doors</b><span>Drinks poured, snacks out, seats claimed. The good chair goes fast and you cannot reserve it with a jacket.</span></div></li>
+      <li><time datetime="19:30">7:30</time><div><b>Film</b><span>The Invite, 107 minutes. Subtitles on, phones face down. One pause allowed and it goes to a vote, so choose your moment.</span></div></li>
+      <li><time datetime="21:17">9:17</time><div><b>Lights up</b><span>Refill, stretch, say the first thing you thought — even if the first thing you thought was just "oh no".</span></div></li>
+      <li><time datetime="21:30">9:30</time><div><b>Talk</b><span>Twelve questions, below. Nobody is required to have a take. Everyone will have one by 9:35.</span></div></li>
+      <li><time datetime="22:15">10:15</time><div><b>Out</b><span>Or stay. Staying slightly too long is, thematically, the entire film.</span></div></li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="head">
+      <p class="kicker">The film</p>
+      <h2>What we're watching</h2>
+    </div>
+    <div class="prose">
+      <p>San Francisco. Joe is a musician whose career has politely stopped returning his calls. Angela is at home, and unimpressed. Their marriage now runs entirely on logistics and low-grade resentment — so they do what couples do when the vibes are bad: invite other people over and hope those people fix it.</p>
+      <p>Upstairs live Piña, a divorced therapist who is professionally unshockable, and Hawk, a widower who has clearly made peace with several things Joe and Angela have not. They come down. They are charming. Then they mention, very casually, how they actually live. The salad hasn't even arrived yet.</p>
+      <p>One apartment, one very long evening, and the most honest conversation this couple has had in about a decade — most of it conducted while holding a wine glass they would love to put down and absolutely cannot.</p>
+      <p class="credit">Directed by <b>Olivia Wilde</b>. Written by <b>Will McCormack</b> and <b>Rashida Jones</b>, from Cesc Gay's Spanish film <b>The People Upstairs</b>. With <b>Seth Rogen</b> (Joe), <b>Olivia Wilde</b> (Angela), <b>Penélope Cruz</b> (Piña) and <b>Edward Norton</b> (Hawk). Cinematography by Adam Newport-Berra, score by Devonté Hynes. Premiered at Sundance in January 2026; released by A24. 107 minutes.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="head">
+      <p class="kicker">The case for it</p>
+      <h2>Why this one</h2>
+    </div>
+    <ul class="marks">
+      <li><b>One room, four people, nowhere to hide.</b> Nobody loses the plot walking to the kitchen. Worst case you miss a joke, and someone will replay it for you, badly.</li>
+      <li><b>It picks a fight worth having.</b> Honesty or peace — which one actually keeps a long relationship alive? The film flatly refuses to settle it. Convenient, since that's what 9:30 is for.</li>
+      <li><b>The reviews are getting embarrassing.</b> 97% on Rotten Tomatoes from 272 critics, 82 on Metacritic, and several of them reaching for <i>Who's Afraid of Virginia Woolf?</i> about a movie starring Seth Rogen.</li>
+      <li><b>Everyone understood the assignment.</b> Norton is having the best time he's had in a decade, Cruz is comfortably the most dangerous person at the table, and Rogen quietly does real acting — which we are all going to be normal about.</li>
+      <li><b>It respects a weeknight.</b> 107 minutes. Out by half ten, emotionally a little worse, socially much better.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="head">
+      <p class="kicker">While it plays</p>
+      <h2>Things worth catching</h2>
+    </div>
+    <ul class="marks">
+      <li><b>The floor plan.</b> Wilde stages the flat like a play: who sits, who stands, who suddenly needs something from the kitchen. It is never really about the kitchen.</li>
+      <li><b>When the camera finally blinks.</b> Long, patient takes. Notice the moment the film loses its nerve and cuts — and whose face it cuts to. It's usually someone who'd rather not be there.</li>
+      <li><b>Where the music isn't.</b> Devonté Hynes' score turns up rarely. The silences are chosen just as carefully, and they're worse.</li>
+      <li><b>Who's actually hosting.</b> Piña is a therapist. Count how often the guests are running the evening while the hosts are merely catering it.</li>
+      <li><b>The glasses and the plates.</b> How wrecked the table is tells you precisely how deep into the night you are. It's the film's clock, and it runs fast.</li>
+      <li><b>The pivot.</b> There's one line where the laugh curdles. See whether the whole room finds the same one — and if you're alone on it, that's information.</li>
+      <li><b>Live editing.</b> Rogen and Wilde play two people rewriting their sentences mid-air. Watch what gets said against what gets visibly swallowed.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="head">
+      <p class="kicker">Afterwards</p>
+      <h2>Questions, served in courses</h2>
+    </div>
+    <p class="sub" style="margin-top:0">Numbered so we can jump around. Someone will want to go straight to number 9.</p>
+
+
+    <div class="course">
+      <h3><span class="course-label">First course</span>While everyone is still being polite</h3>
+      <ol class="q" start="1">
+        <li>Whose side were you on when the neighbours knocked — and had that moved by the time they left?</li>
+        <li>Which of the four would you genuinely want living above you? Show your working.</li>
+        <li>Was this ever actually a dinner, or was it an ambush with side dishes?</li>
+      </ol>
+    </div>
+
+    <div class="course">
+      <h3><span class="course-label">Main</span>The part we came for</h3>
+      <ol class="q" start="4">
+        <li>Piña offers a binary: separate, or rebuild the marriage into something else entirely. Real choice, or a therapist doing a party trick?</li>
+        <li>Staying together for the kids — generous, cowardly, or simply less effort than moving out? Does the film think it knows?</li>
+        <li>Hawk and Piña present their arrangement as the more honest life. Are they honest, or just better rehearsed?</li>
+        <li>Critics keep reaching for <i>Who's Afraid of Virginia Woolf?</i> Is this film as cruel, or does it let everybody off with a warning?</li>
+        <li>Does the comedy protect the characters, or protect us? Be honest: you laughed at the worst bit.</li>
+        <li>Who told the biggest lie tonight — and was it to someone else, or to themselves?</li>
+      </ol>
+    </div>
+
+    <div class="course">
+      <h3><span class="course-label">Dessert</span>Before anyone finds their coat</h3>
+      <ol class="q" start="10">
+        <li>Did the ending earn how it left them? And which ending did you want, before you got the one you got?</li>
+        <li>The same night, told from upstairs. What's that film?</li>
+        <li>One sentence to Joe. One sentence to Angela. You get no follow-up.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="rsvp">
+    <div class="head">
+      <p class="kicker">Say you're coming</p>
+      <h2>RSVP</h2>
+    </div>
+    <p>Name, and how many of you. The button opens an email to me with everything filled in — you only have to press send, which is the least this evening will ask of you. Thursday night is the cut-off, because that's when I buy the snacks, and I am not buying them twice.</p>
+    <form class="rsvp-form" onsubmit="return false;">
+      <label class="wide" for="r-name">Your name
+        <input id="r-name" name="name" type="text" autocomplete="name" placeholder="Who's coming?">
+      </label>
+      <label for="r-count">How many, including you
+        <input id="r-count" name="count" type="number" min="1" max="12" step="1" value="1" inputmode="numeric">
+      </label>
+      <label class="wide" for="r-note">Anything I should know
+        <input id="r-note" name="note" type="text" placeholder="Allergies, arriving late, bringing something…">
+      </label>
+    </form>
+    <a class="btn" id="r-send" href="#rsvp">Send my RSVP →</a>
+    <p class="fine">This opens your own mail app — nothing goes anywhere until you press send there. If it refuses to open, just write to <a id="r-mail" href="#rsvp">me</a> with your name and headcount.</p>
+  </section>
+
+  <section>
+    <div class="head">
+      <p class="kicker">House notes</p>
+      <h2>Good to know</h2>
+    </div>
+    <dl class="notes">
+      <div><dt>The $7</dt><dd>Covers the snacks and drinks for the night.</dd></div>
+      <div><dt>Content</dt><dd>An adult comedy about marriage and sex — frank throughout, nothing graphic. Not one for kids.</dd></div>
+      <div><dt>House rules</dt><dd>Subtitles on, phones face down. One pause if we agree on it.</dd></div>
+      <div><dt>RSVP</dt><dd>By Thursday night, through the <a href="#rsvp">form above</a>, so the shopping is right.</dd></div>
+      <div><dt>Address</dt><dd>Goes out with your RSVP confirmation.</dd></div>
+      <div><dt>Parking</dt><dd>Street parking, easier after 7.</dd></div>
+    </dl>
+  </section>
+
+  <footer class="closing">
+    <q>It'll be fun.</q>
+    <p>Friday 21 August · Doors 7:15 · Film 7:30</p>
+    <p class="wink">That's exactly what they say in the film, too.</p>
+  </footer>
+
+</main>
+
+<script>
+  (function () {
+    var name = document.getElementById('r-name');
+    var count = document.getElementById('r-count');
+    var note = document.getElementById('r-note');
+    var send = document.getElementById('r-send');
+    var host = function () { return ['farnazz.safari', 'gmail.com'].join(String.fromCharCode(64)); };
+    var plain = document.getElementById('r-mail');
+    if (plain) { plain.href = 'mailto:' + host(); plain.textContent = host(); }
+    if (!name || !count || !note || !send) return;
+
+    function build() {
+      var who = (name.value || '').trim();
+      var howMany = (count.value || '1').trim();
+      var extra = (note.value || '').trim();
+      var lines = [
+        'Count me in for movie night.',
+        '',
+        'Name: ' + (who || '(add your name)'),
+        'Coming, including me: ' + howMany
+      ];
+      if (extra) lines.push('Note: ' + extra);
+      lines.push('', 'See you at 7:15.');
+      send.href = 'mailto:' + host()
+        + '?subject=' + encodeURIComponent('RSVP — The Invite, Fri 21 Aug')
+        + '&body=' + encodeURIComponent(lines.join('\n'));
+    }
+
+    [name, count, note].forEach(function (el) {
+      el.addEventListener('input', build);
+      el.addEventListener('change', build);
+    });
+    build();
+  })();
+</script>
