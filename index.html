@@ -298,6 +298,7 @@
   .rsvp-form input::placeholder{color:rgba(175,192,216,.5)}
   .rsvp-form input:focus-visible{outline:2px solid var(--gold);outline-offset:1px;border-color:transparent}
   #r-count{max-width:8rem;font-variant-numeric:tabular-nums}
+  .trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
   .rsvp-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.9rem 1.25rem;margin-top:.35rem}
   #rsvp-form.sent .rsvp-form-fade{opacity:.35;pointer-events:none}
   #r-status{margin:0;max-width:32ch}
@@ -660,6 +661,9 @@
       <label class="wide" for="r-note">Anything I should know
         <input id="r-note" name="note" type="text" placeholder="Allergies, arriving late, bringing something…">
       </label>
+      <label class="trap" aria-hidden="true"><span>Leave this empty</span>
+        <input id="r-trap" name="_honey" type="text" tabindex="-1" autocomplete="off">
+      </label>
       <div class="wide rsvp-actions">
         <button class="btn" id="r-send" type="submit">I'm coming →</button>
         <p class="fine" id="r-status" role="status" aria-live="polite"></p>
@@ -731,6 +735,7 @@
           _subject: 'RSVP — ' + who + ' is coming to movie night',
           _template: 'table',
           _captcha: 'false',
+          _honey: (document.getElementById('r-trap') || {}).value || '',
           Name: who,
           'Coming, including them': howMany,
           Note: extra || '—',
@@ -739,7 +744,14 @@
       })
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        if (!d || (d.success !== true && d.success !== 'true')) throw new Error('rejected');
+        if (!d || (d.success !== true && d.success !== 'true')) {
+          if (d && /activat/i.test(d.message || '')) {
+            btn.disabled = false;
+            status.textContent = 'Almost — the host still has to activate this form. Try again in a minute.';
+            return;
+          }
+          throw new Error('rejected');
+        }
         form.classList.add('sent');
         [nameEl, countEl, noteEl, btn].forEach(function (el) { el.disabled = true; });
         status.innerHTML = '';
