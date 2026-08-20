@@ -298,16 +298,8 @@
   .rsvp-form input::placeholder{color:rgba(175,192,216,.5)}
   .rsvp-form input:focus-visible{outline:2px solid var(--gold);outline-offset:1px;border-color:transparent}
   #r-count{max-width:8rem;font-variant-numeric:tabular-nums}
-  .trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-  .rsvp-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.9rem 1.25rem;margin-top:.35rem}
-  #rsvp-form.sent .rsvp-form-fade{opacity:.35;pointer-events:none}
-  #r-status{margin:0;max-width:32ch}
-  #r-status b{color:var(--gold);font-weight:700}
   .btn{
     align-self:flex-start;
-    font-family:var(--body);
-    border:0;
-    cursor:pointer;
     display:inline-flex;
     align-items:center;
     gap:.55rem;
@@ -320,8 +312,7 @@
     text-decoration:none;
     transition:background .2s ease,transform .2s ease;
   }
-  .btn:hover:not(:disabled){background:#EDC98A;transform:translateY(-1px)}
-  .btn:disabled{opacity:.5;cursor:default}
+  .btn:hover{background:#EDC98A;transform:translateY(-1px)}
   .btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
   .fine{font-size:.87rem;color:var(--ink-soft);max-width:52ch}
   @media (prefers-reduced-motion:reduce){.btn{transition:none}.btn:hover{transform:none}}
@@ -650,10 +641,10 @@
       <p class="kicker">Say you're coming</p>
       <h2>RSVP</h2>
     </div>
-    <p>Name, and how many of you — press the button and you're on the list. Nothing opens, nothing to send. Thursday night is the cut-off, because that's when I buy the snacks, and I am not buying them twice.</p>
-    <form class="rsvp-form" id="rsvp-form" novalidate>
+    <p>Name, and how many of you. The button opens an email to me with everything filled in — you only have to press send, which is the least this evening will ask of you. Thursday night is the cut-off, because that's when I buy the snacks, and I am not buying them twice.</p>
+    <form class="rsvp-form" onsubmit="return false;">
       <label class="wide" for="r-name">Your name
-        <input id="r-name" name="name" type="text" autocomplete="name" placeholder="Who's coming?" required>
+        <input id="r-name" name="name" type="text" autocomplete="name" placeholder="Who's coming?">
       </label>
       <label for="r-count">How many, including you
         <input id="r-count" name="count" type="number" min="1" max="12" step="1" value="1" inputmode="numeric">
@@ -661,14 +652,9 @@
       <label class="wide" for="r-note">Anything I should know
         <input id="r-note" name="note" type="text" placeholder="Allergies, arriving late, bringing something…">
       </label>
-      <label class="trap" aria-hidden="true"><span>Leave this empty</span>
-        <input id="r-trap" name="_honey" type="text" tabindex="-1" autocomplete="off">
-      </label>
-      <div class="wide rsvp-actions">
-        <button class="btn" id="r-send" type="submit">I'm coming →</button>
-        <p class="fine" id="r-status" role="status" aria-live="polite"></p>
-      </div>
     </form>
+    <a class="btn" id="r-send" href="#rsvp">Send my RSVP →</a>
+    <p class="fine">This opens your own mail app — nothing goes anywhere until you press send there. If it refuses to open, just write to <a id="r-mail" href="#rsvp">me</a> with your name and headcount.</p>
   </section>
 
   <section>
@@ -696,74 +682,36 @@
 
 <script>
   (function () {
-    var form = document.getElementById('rsvp-form');
-    if (!form) return;
-    var nameEl = document.getElementById('r-name');
-    var countEl = document.getElementById('r-count');
-    var noteEl = document.getElementById('r-note');
-    var btn = document.getElementById('r-send');
-    var status = document.getElementById('r-status');
+    var name = document.getElementById('r-name');
+    var count = document.getElementById('r-count');
+    var note = document.getElementById('r-note');
+    var send = document.getElementById('r-send');
     var host = function () { return ['farnazz.safari', 'gmail.com'].join(String.fromCharCode(64)); };
+    var plain = document.getElementById('r-mail');
+    if (plain) { plain.href = 'mailto:' + host(); plain.textContent = host(); }
+    if (!name || !count || !note || !send) return;
 
-    function fallback(who) {
-      status.textContent = 'That did not go through. Email me instead: ';
-      var a = document.createElement('a');
-      a.href = 'mailto:' + host() + '?subject=' + encodeURIComponent('RSVP — The Invite, Fri 21 Aug')
-             + '&body=' + encodeURIComponent((who ? who + ' is coming.' : 'Count me in.'));
-      a.textContent = host();
-      status.appendChild(a);
+    function build() {
+      var who = (name.value || '').trim();
+      var howMany = (count.value || '1').trim();
+      var extra = (note.value || '').trim();
+      var lines = [
+        'Count me in for movie night.',
+        '',
+        'Name: ' + (who || '(add your name)'),
+        'Coming, including me: ' + howMany
+      ];
+      if (extra) lines.push('Note: ' + extra);
+      lines.push('', 'See you at 7:15.');
+      send.href = 'mailto:' + host()
+        + '?subject=' + encodeURIComponent('RSVP — The Invite, Fri 21 Aug')
+        + '&body=' + encodeURIComponent(lines.join('\n'));
     }
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var who = (nameEl.value || '').trim();
-      if (!who) {
-        status.textContent = 'Put your name in first.';
-        nameEl.focus();
-        return;
-      }
-      var howMany = (countEl.value || '1').trim();
-      var extra = (noteEl.value || '').trim();
-
-      btn.disabled = true;
-      status.textContent = 'Sending…';
-
-      fetch('https://formsubmit.co/ajax/' + host(), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-          _subject: 'RSVP — ' + who + ' is coming to movie night',
-          _template: 'table',
-          _captcha: 'false',
-          _honey: (document.getElementById('r-trap') || {}).value || '',
-          Name: who,
-          'Coming, including them': howMany,
-          Note: extra || '—',
-          Event: 'The Invite — Friday 21 August 2026, doors 7:15'
-        })
-      })
-      .then(function (r) { return r.json(); })
-      .then(function (d) {
-        if (!d || (d.success !== true && d.success !== 'true')) {
-          if (d && /activat/i.test(d.message || '')) {
-            btn.disabled = false;
-            status.textContent = 'Almost — the host still has to activate this form. Try again in a minute.';
-            return;
-          }
-          throw new Error('rejected');
-        }
-        form.classList.add('sent');
-        [nameEl, countEl, noteEl, btn].forEach(function (el) { el.disabled = true; });
-        status.innerHTML = '';
-        var b = document.createElement('b');
-        b.textContent = "You're on the list, " + who + '.';
-        status.appendChild(b);
-        status.appendChild(document.createTextNode(' See you Friday, 7:15.'));
-      })
-      .catch(function () {
-        btn.disabled = false;
-        fallback(who);
-      });
+    [name, count, note].forEach(function (el) {
+      el.addEventListener('input', build);
+      el.addEventListener('change', build);
     });
+    build();
   })();
 </script>
